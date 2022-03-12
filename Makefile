@@ -6,6 +6,7 @@ ODIR=obj
 LDIR =
 
 #LIBS=-lm
+all: lz4
 
 _DEPS = lz4.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
@@ -17,7 +18,7 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-test: $(OBJ)
+lz4: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean
