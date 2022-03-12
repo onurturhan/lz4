@@ -77,43 +77,52 @@ int main(int argc,  char* argv[])
 
     if(argc == 4)
     {
+            /* Decompression */
             if(strcmp(argv[1],"-d") == 0)
             {
                 if( (Status = readfile(argv[2], inp )) != EXIT_SUCCESS)
                     goto destructor;
 
-                printf("Decompressing %s to %s\n", argv[2], argv[3]);
+                printf("LZ4 Decompressing: \"%s\" => \"%s\" \n", argv[2], argv[3]);
 
                 if( (decompSize = LZ4_decompress_safe(inp, out, srcSize, sizeof(out))) <= 0 )
                     goto destructor;
 
                 writefile(argv[3],out,decompSize);
+                
+                printf("SrcSize:%d - DecompSize:%d - CompRate: %0.2f\n", srcSize, decompSize, (srcSize*1.0)/decompSize);
             }
+            /* Compression */
             else if(strcmp(argv[1],"-c") == 0)
             {
                 if( (Status = readfile(argv[2], inp )) != EXIT_SUCCESS)
                     goto destructor;
 
-                printf("Compressing %s to %s\n", argv[2], argv[3]);
+                printf("LZ4 Compressing: \"%s\" => \"%s\" \n", argv[2], argv[3]);
 
                 if( (compSize = LZ4_compress_default(inp, out, srcSize, sizeof(out))) <= 0 )
                     goto destructor;
 
                 writefile(argv[3],out,compSize);
+                
+                printf("SrcSize:%d - CompSize:%d - CompRate: %0.2f\n", srcSize, compSize, compSize/(srcSize*1.0));
             }
+            /* Unknown */
             else
             {
-                printf("Usage:\n     for compression:    ./lz4 -c input_filepath out_file_path \n     for decompression:  ./lz4 -d input_file_path out_file_path\n");
+                printf("Usage:"
+                       "\n     Compression   =>  ./lz4 -c input_filepath output_filepath "
+                       "\n     Decompression =>  ./lz4 -d input_filepath output_filepath \n");
                 goto destructor;
             }
     }
     else
     {
-        printf("Usage:\n     for compression:    ./lz4 -c input_filepath out_file_path \n     for decompression:  ./lz4 -d input_file_path out_file_path\n");
+        printf("Usage:"
+               "\n     Compression   =>  ./lz4 -c input_filepath output_filepath "
+               "\n     Decompression =>  ./lz4 -d input_filepath output_filepath \n");
         goto destructor;
     }
-
-    printf("srcSize:%d - compSize:%d - decompSize:%d \n", srcSize, compSize, decompSize);
 
 destructor:
     return 0;
