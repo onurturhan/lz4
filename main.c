@@ -43,9 +43,9 @@ int readfile(const char* filename, char* src)
     srcSize = sb.st_size;
 
     fread(src, srcSize, 1, in_file);
-
+#if 0
     printf("Read data : [0]0x%02X [1]0x%02X / LEN:%d \n", src[0], src[1], srcSize);
-
+#endif
     fclose(in_file);
 
     return(EXIT_SUCCESS);
@@ -61,9 +61,9 @@ int writefile(const char* filename , char * src, size_t size )
         perror("fopen");
         return(EXIT_FAILURE);
     }
-
+#if 0
     printf("Write data: [0]0x%02X [1]0x%02X / LEN:%d \n", src[0], src[1], size);
-
+#endif
     fwrite(src, 1, size, file);
 
     fclose(file);
